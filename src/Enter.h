@@ -3,6 +3,8 @@
 
 class Enter
 {
+    string Car_number;
+
 public:
     Enter();
     ~Enter();
