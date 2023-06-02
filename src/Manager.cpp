@@ -12,13 +12,16 @@ Manager::~Manager()
 
 void Manager::show()
 {
-    while (1)
+    int num = 1;
+
+    while (num > 0 && num < 5)
     {
-        int num;
         front();
         cin >> num;
         switch (num)
         {
+        case 0:
+            break;
         case 1:
             enter.show();
             break;
@@ -47,4 +50,5 @@ void Manager::front()
     cout << "2. 출차" << endl;
     cout << "3. 정산하기" << endl;
     cout << "4. 회원 관리" << endl;
+    cout << "* 다른 키 입력 시 종료 *" << endl;
 }

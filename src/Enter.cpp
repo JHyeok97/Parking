@@ -5,6 +5,14 @@
 
 using namespace std;
 
+Enter::~Enter()
+{
+}
+
+Enter::Enter()
+{
+}
+
 void Enter::show()
 {
     system("clear");
