@@ -14,7 +14,7 @@
 
 이 프로젝트는 주차장의 주차 및 결제 정보를 관리하기 위한 **데이터베이스**를 사용합니다. 이 데이터베이스는 방문객, 회원, 관리자, 주차 정보, 결제 정보 등에 대한 정보를 포함하는 다양한 테이블을 포함합니다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9be82500-d413-487f-94e1-fcd39d4ffc76/Untitled.png)
+![ERD](https://github.com/Koartifact/Parking/assets/64429035/454663b0-6385-4933-9065-49a8357ea53f)
 
 - Guest: 방문객을 나타내며, 각각 고유의 ID와 차량 ID를 가집니다.
 - Members: 회원을 나타내며, 각각 고유의 ID, 차량 ID, 이름, 주소, 전화번호, 만료 날짜를 가집니다.
