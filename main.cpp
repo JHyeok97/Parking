@@ -2,7 +2,8 @@
 #include "View.h"
 #include "Controller.h"
 
-int main() {
+int main()
+{
     Database db("db_name", "parkingman123", "test123");
     View view;
     Controller controller(&db, &view);
