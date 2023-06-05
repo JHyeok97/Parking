@@ -4,18 +4,20 @@
 #include "Database.h"
 #include "View.h"
 
-class Controller {
+class Controller
+{
 public:
-    Controller(Database* db, View* view);
+    Controller(Database *db, View *view);
     void run();
 
 private:
-    Database* db;
-    View* view;
+    Database *db;
+    View *view;
 
     void enterCar();
     void exitCar();
     void manageData();
+    void calculate();
 };
 
 #endif

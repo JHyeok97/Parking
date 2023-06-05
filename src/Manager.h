@@ -3,6 +3,9 @@
 #include "Calculate.h"
 #include "Enter.h"
 #include "Exit.h"
+#include "Database.h"
+#include "View.h"
+#include "Controller.h"
 
 class Manager
 {
