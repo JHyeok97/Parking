@@ -4,9 +4,9 @@
 
 int main()
 {
-    Database db("db_name", "parkingman123", "test123");
-    View view;
-    Controller controller(&db, &view);
+    Database db("park_db", "parkingman123", "test123");
+    View v;
+    Controller controller(&db, &v);
     controller.run();
     return 0;
 }
