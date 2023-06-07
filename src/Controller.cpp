@@ -5,8 +5,8 @@
 #include <thread>
 
 using namespace std;
-
-Controller::Controller(Database *db, View *view) : db(db), view(view) {}
+// 생성자 구현
+Controller::Controller(Database* database, View* view) : database(database), view(view) {}
 
 void Controller::run()
 {
@@ -27,39 +27,59 @@ void Controller::run()
             break;
         case 4:
             manageData();
-            return;
+            break;
+        case 5:
+            return ;        
         default:
             cout << "Invalid choice\n";
         }
     }
 }
 
-void Controller::enterCar()
-{
-    string car_id = view->getInput("Enter car ID: ");
-    if (db->enterCar(car_id))
-    {
-        cout << "Car entered\n";
-    }
-    else
-    {
-        cout << "Error entering car\n";
+void Controller::enterCar() {
+    while (true) {
+        std::string carID = view->getInput("차량 ID를 입력하세요: ");
+        std::cout << "입력한 차량 ID: " << carID << std::endl;
+        std::string confirm = view->getInput("맞습니까? (예/아니오): ");
+        if (confirm == "예") {
+            if (database->isMember(carID)) {
+                std::cout << "PASS 가입자 입니다." << std::endl;
+                // 현재 시간 출력
+                auto now = std::chrono::system_clock::now();
+                auto now_c = std::chrono::system_clock::to_time_t(now);
+                std::cout << "현재 시간: " << std::ctime(&now_c) << std::endl;
+                // Parking 데이터베이스에 값 저장
+                database->enterCar(carID, "Member");
+            } else {
+                std::cout << "GUEST 입니다." << std::endl;
+                // 현재 시간 출력
+                auto now = std::chrono::system_clock::now();
+                auto now_c = std::chrono::system_clock::to_time_t(now);
+                std::cout << "현재 시간: " << std::ctime(&now_c) << std::endl;
+                // Guest 데이터베이스에 값 저장
+                database->enterCar(carID, "Guest");
+            }
+            break;
+        } else if (confirm == "아니오") {
+            continue;
+        } else {
+            std::cout << "잘못된 입력입니다. 다시 입력해주세요." << std::endl;
+        }
     }
 }
 
-void Controller::exitCar()
-{
-    string car_id = view->getInput("Enter car ID: ");
-    string payment_method = view->getInput("Enter payment method: ");
-    if (db->exitCar(car_id, payment_method))
-    {
-        cout << "Car exited\n";
-    }
-    else
-    {
-        cout << "Error exiting car\n";
-    }
+
+// 차량 출차 처리 메소드 구현
+void Controller::exitCar() {
+  std::string car_id = view->getInput("Enter car ID: "); // 차량 ID 입력 받음
+  std::string payment_method = view->getInput("Enter payment method: "); // 결제 방법 입력 받음
+  if (database->exitCar(car_id, payment_method)) { // 차량 출차 처리
+    std::cout << "Car exited\n"; // 출차 성공 메시지 출력
+  } else {
+    std::cout << "Error exiting car\n"; // 출차 실패 메시지 출력
+  }
 }
+
 
 void Controller::calculate()
 {
