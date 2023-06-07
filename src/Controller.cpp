@@ -97,6 +97,39 @@ void Controller::exitCar()
 void Controller::calculate()
 {
     // 정산 코드
+    
+    // 입차 시간 입력
+    time_t enterTime;
+    cout << "입차 시간을 입력하세요 (예: 2023-06-07 10:30:00): "; // 이거 db에서 값 빼오는걸로 수정해야함
+    string enterTimeString;
+    cin.ignore();  // 이전 입력 버퍼 비우기
+    getline(cin, enterTimeString);
+    struct tm enterTM;
+    strptime(enterTimeString.c_str(), "%Y-%m-%d %H:%M:%S", &enterTM);
+    enterTime = mktime(&enterTM);
+
+    // 출차 시간 입력
+    time_t exitTime;
+    cout << "출차 시간을 입력하세요 (예: 2023-06-07 14:45:00): "; // 이거 db에서 값 빼오는걸로 수정해야함
+    string exitTimeString;
+    getline(cin, exitTimeString);
+    struct tm exitTM;
+    strptime(exitTimeString.c_str(), "%Y-%m-%d %H:%M:%S", &exitTM);
+    exitTime = mktime(&exitTM);
+
+    // 주차 시간 계산
+    double parkingDuration = difftime(exitTime, enterTime) / 3600.0;  // 시간 단위로 변환
+
+    // 주차 요금 계산
+    double parkingRate = 3000.0;  // 시간당 요금 (3000원)
+    double parkingFee = parkingDuration * parkingRate;
+
+    // 출차 정보 출력
+    cout << "출차 시간: " << exitTimeString << endl;
+    cout << "주차 시간: " << parkingDuration << "시간" << endl;
+    cout << "주차 요금: " << parkingFee << "원" << endl;
+
+    // db데이터 연결해야함
 }
 
 void Controller::manageData()
