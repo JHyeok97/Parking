@@ -1,20 +1,30 @@
 #include "View.h"
 #include <iostream>
+using namespace std;
 
-int View::showMenu() {
+int View::showMenu()
+{
     int choice;
-    std::cout << "1. 입차\n";
-    std::cout << "2. 출차\n";
-    std::cout << "3. 데이터 관리\n";
-    std::cout << "4. 종료\n";
-    std::cout << "선택: ";
-    std::cin >> choice;
+    system("clear");
+    cout << "1. 입차" << endl;
+    cout << "2. 출차" << endl;
+    cout << "3. 정산하기" << endl;
+    cout << "4. 회원 관리\n"
+         << endl;
+    cout << "5. 종료\n"
+         << endl;
+    cout << "선택: ";
+    cin >> choice;
+
     return choice;
 }
 
-std::string View::getInput(const std::string& prompt) {
-    std::string input;
-    std::cout << prompt;
-    std::cin >> input;
+string View::getInput(const std::string &prompt)
+{
+    string input;
+
+    cout << prompt;
+    cin >> input;
+
     return input;
 }
