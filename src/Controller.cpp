@@ -111,6 +111,46 @@ void Controller::manageData()
     if (password == "1234") // 비밀 번호가 맞으면 실행
     {
         // 회원 관리(삭제/추가)
+        int mem;
+        string member_id, car_id, member_name, address, phone_number, expiration_date;
+
+        system("clear");
+        cout << "1. 회원 추가" << endl;
+        cout << "2. 회원 삭제" << endl;
+        cout << "선택 : ";
+        cin >> mem;
+
+        switch (mem)
+        {
+        case 1:
+            // 회원 추가
+            cin.ignore(4096, '\n'); // 버퍼 초기화
+
+            cout << "member id : ";
+            getline(cin, member_id);
+            cout << "car id : ";
+            getline(cin, car_id);
+            cout << "member name : ";
+            getline(cin, member_name);
+            cout << "address : ";
+            getline(cin, address);
+            cout << "phone number : ";
+            getline(cin, phone_number);
+            cout << "expiration date : ";
+            getline(cin, expiration_date);
+
+            if (database->addMembers(member_id, car_id, member_name, address, phone_number, expiration_date))
+            {
+                cout << car_id << " 차량 회원 등록이 완료되었습니다." << endl;
+            };
+
+            break;
+        case 2:
+            // 회원 삭제
+            break;
+        default:
+            break;
+        }
     }
     else
     {

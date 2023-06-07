@@ -40,7 +40,9 @@ void Database::enterCar(const std::string &carID, const std::string &carType)
     {
         std::string query = "INSERT INTO Parking (member_id, enter_time) VALUES ('" + carID + "', '" + currentTime + "');";
         // 쿼리를 실행합니다.
-    } else if (carType == "Guest") {
+    }
+    else if (carType == "Guest")
+    {
         std::string query = "INSERT INTO Guest (car_id) VALUES ('" + carID + "');";
         // 쿼리를 실행합니다.
         std::unique_ptr<sql::Statement> stmt(con->createStatement());
@@ -67,9 +69,17 @@ vector<std::vector<std::string>> Database::queryData(const std::string &table_na
     return data;
 }
 
+bool Database::addMembers(string &member_id, string &car_id, string &member_name, string &address, string &phone_number, string &expiration_date)
+{
+    unique_ptr<sql::Statement> stmt(con->createStatement());
+    stmt->execute("INSERT INTO Members (member_id, car_id, member_name, address, phone_number, expiration_date) VALUES ('" + member_id + "', '" + car_id + "', '" + member_name + "', '" + address + "', '" + phone_number + "', '" + expiration_date + "');");
+
+    return true;
+}
+
 bool Database::deleteData(const string &table_name, const string &attribute, const string &value)
 {
     unique_ptr<sql::Statement> stmt(con->createStatement());
-    stmt->execute("DELETE FROM " + table_name + " WHERE " + attribute + " = '" + value + "'");
+    stmt->execute("DELETE FROM " + table_name + " WHERE " + attribute + " = '" + value + "';");
     return true;
 }
