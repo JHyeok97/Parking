@@ -9,11 +9,9 @@ int View::showMenu()
     cout << "1. 입차" << endl;
     cout << "2. 출차" << endl;
     cout << "3. 정산하기" << endl;
-    cout << "4. 회원 관리\n"
-         << endl;
-    cout << "5. 종료\n"
-         << endl;
-    cout << "선택: ";
+    cout << "4. 회원 관리" << endl;
+    cout << "5. 종료" << endl;
+    cout << "\n선택: ";
     cin >> choice;
 
     return choice;
