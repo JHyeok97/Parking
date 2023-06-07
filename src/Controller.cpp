@@ -112,7 +112,7 @@ void Controller::manageData()
     {
         // 회원 관리(삭제/추가)
         int mem;
-        string member_id, car_id, member_name, address, phone_number, expiration_date;
+        string member_id, car_id, member_name, address, phone_number;
 
         system("clear");
         cout << "1. 회원 추가" << endl;
@@ -120,11 +120,25 @@ void Controller::manageData()
         cout << "선택 : ";
         cin >> mem;
 
+        // 현재 날짜 정보 가져오기
+        time_t now = time(nullptr);
+        tm *localTime = localtime(&now);
+
+        // 1달을 더한 날짜 계산
+        localTime->tm_mon += 1;
+        mktime(localTime);
+
+        // YYYY-MM-DD 형식 변환
+        char expiration_date[11];
+        strftime(expiration_date, sizeof(expiration_date), "%Y-%m-%d", localTime);
+
+        string expiration_date_str(expiration_date);
+
         switch (mem)
         {
         case 1:
             // 회원 추가
-            cin.ignore(4096, '\n'); // 버퍼 초기화
+            cin.ignore(); // 버퍼 초기화
 
             cout << "member id : ";
             getline(cin, member_id);
@@ -136,12 +150,11 @@ void Controller::manageData()
             getline(cin, address);
             cout << "phone number : ";
             getline(cin, phone_number);
-            cout << "expiration date : ";
-            getline(cin, expiration_date);
 
-            if (database->addMembers(member_id, car_id, member_name, address, phone_number, expiration_date))
+            if (database->addMembers(member_id, car_id, member_name, address, phone_number, expiration_date_str))
             {
                 cout << car_id << " 차량 회원 등록이 완료되었습니다." << endl;
+                this_thread::sleep_for(chrono::seconds(1));
             };
 
             break;
