@@ -36,7 +36,6 @@ CREATE TABLE Pay(
 ); 
 
 
-
 INSERT INTO Admin(admin_id, admin_name, admin_phone, e_mail) VALUES('Alpha', '김일층', '010-3352-7351', 'wkek54@naver.com');
 INSERT INTO Admin(admin_id, admin_name, admin_phone, e_mail) VALUES('Beta', '박이층', '010-8874-5663', 'cngks123@naver.com');
 
