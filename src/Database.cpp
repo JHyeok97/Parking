@@ -35,17 +35,16 @@ void Database::enterCar(const std::string &carID, const std::string &carType)
     std::stringstream ss;
     ss << std::put_time(now_tm, "%F %T");
     std::string currentTime = ss.str();
-
     // carType에 따라 적절한 데이터베이스에 carID와 현재 시간을 저장합니다.
     if (carType == "Member")
     {
         std::string query = "INSERT INTO Parking (member_id, enter_time) VALUES ('" + carID + "', '" + currentTime + "');";
         // 쿼리를 실행합니다.
-    }
-    else if (carType == "Guest")
-    {
+    } else if (carType == "Guest") {
         std::string query = "INSERT INTO Guest (car_id) VALUES ('" + carID + "');";
         // 쿼리를 실행합니다.
+        std::unique_ptr<sql::Statement> stmt(con->createStatement());
+        stmt->execute(query);
     }
 }
 
