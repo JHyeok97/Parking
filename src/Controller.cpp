@@ -97,12 +97,12 @@ void Controller::exitCar()
 void Controller::calculate()
 {
     // 정산 코드
-    
+
     // 입차 시간 입력
     time_t enterTime;
     cout << "입차 시간을 입력하세요 (예: 2023-06-07 10:30:00): "; // 이거 db에서 값 빼오는걸로 수정해야함
     string enterTimeString;
-    cin.ignore();  // 이전 입력 버퍼 비우기
+    cin.ignore(); // 이전 입력 버퍼 비우기
     getline(cin, enterTimeString);
     struct tm enterTM;
     strptime(enterTimeString.c_str(), "%Y-%m-%d %H:%M:%S", &enterTM);
@@ -118,10 +118,10 @@ void Controller::calculate()
     exitTime = mktime(&exitTM);
 
     // 주차 시간 계산
-    double parkingDuration = difftime(exitTime, enterTime) / 3600.0;  // 시간 단위로 변환
+    double parkingDuration = difftime(exitTime, enterTime) / 3600.0; // 시간 단위로 변환
 
     // 주차 요금 계산
-    double parkingRate = 3000.0;  // 시간당 요금 (3000원)
+    double parkingRate = 3000.0; // 시간당 요금 (3000원)
     double parkingFee = parkingDuration * parkingRate;
 
     // 출차 정보 출력
@@ -201,7 +201,7 @@ void Controller::manageData()
             system("clear");
             sql::ResultSet *res = database->showMembers("SELECT * FROM Members");
             vector<vector<string>> table;
-            vector<string> header = {"  회원 ID", "   차량 번호", "이름", "주소", "전화번호", "종료일"};
+            vector<string> header = {"회원 ID", "차량 번호", "이름", "주소", "전화번호", "종료일"};
             table.push_back(header);
             while (res->next())
             {
@@ -215,8 +215,8 @@ void Controller::manageData()
 
                 table.push_back(row);
             }
-
-            view->printTable(table);
+            ftxui::Table ftable = table;
+            view->printTable(ftable);
 
             cout << "\nEnter 입력 시 처음 화면으로..." << endl;
             cin.ignore();

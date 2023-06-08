@@ -29,42 +29,31 @@ string View::getInput(const std::string &prompt)
     return input;
 }
 
-void View::printTable(const std::vector<std::vector<std::string>> &table)
+void View::printTable(ftxui::Table &ftable)
 {
-    if (table.empty())
-    {
-        std::cout << "Table is empty." << std::endl;
-        return;
-    }
+    ftable.SelectAll().Border(ftxui::BorderStyle::LIGHT);
 
-    // 열의 너비 계산
-    std::vector<size_t> colWidths(table[0].size());
-    for (const auto &row : table)
-    {
-        for (size_t i = 0; i < row.size(); ++i)
-        {
-            if (row[i].length() > colWidths[i])
-            {
-                colWidths[i] = row[i].length();
-            }
-        }
-    }
+    // Add border around the first column
+    ftable.SelectColumn(0).Border(ftxui::BorderStyle::LIGHT);
 
-    // 표 출력
-    for (const auto &row : table)
-    {
-        for (size_t i = 0; i < row.size(); ++i)
-        {
-            std::cout << std::setw(colWidths[i]) << std::left << std::setfill(' ') << row[i] << " | ";
-        }
-        std::cout << std::endl;
+    // Make first row bold with a double border.
+    ftable.SelectRow(0).Decorate(ftxui::bold);
+    ftable.SelectRow(0).SeparatorVertical(ftxui::BorderStyle::LIGHT);
+    ftable.SelectRow(0).Border(ftxui::DOUBLE);
 
-        // 구분선 출력
-        for (size_t i = 0; i < colWidths.size(); ++i)
-        {
-            std::cout << std::setw(colWidths[i]) << std::left << std::setfill('-') << ""
-                      << "-";
-        }
-        std::cout << std::endl;
-    }
+    // Align right the "Release date" column.
+    ftable.SelectColumn(2).DecorateCells(ftxui::align_right);
+
+    // Select row from the second to the last.
+    auto content = ftable.SelectRows(1, -1);
+    // Alternate in between 3 colors.
+    content.DecorateCellsAlternateRow(ftxui::color(ftxui::Color::Blue), 3, 0);
+    content.DecorateCellsAlternateRow(ftxui::color(ftxui::Color::Cyan), 3, 1);
+    content.DecorateCellsAlternateRow(ftxui::color(ftxui::Color::White), 3, 2);
+
+    auto document = ftable.Render();
+    auto screen = ftxui::Screen::Create(ftxui::Dimension::Fit(document));
+    Render(screen, document);
+    screen.Print();
+    std::cout << std::endl;
 }
