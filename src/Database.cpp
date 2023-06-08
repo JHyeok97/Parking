@@ -33,13 +33,6 @@ bool Database::isMember(const std::string& carID, std::string& memberID)
     return false;
 }
 
-void Database::addGuest(const std::string& guestID, const std::string& carID)
-{
-    std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
-    std::unique_ptr<sql::Statement> stmt(con->createStatement());
-    stmt->execute(query);
-}
-
 std::string Database::generateGuestID()
 {
     std::string query = "SELECT MAX(guest_id) AS guest_id FROM Guest;";
@@ -49,10 +42,10 @@ std::string Database::generateGuestID()
     std::string lastGuestID = "g0";  // Default value
     if (res->next())
     {
-        std::string result = res->getString("guest_id");
-        if (!result.empty())    // Check if the result is not NULL
+        std::string result = res->getString("guest_id"); //
+        if (!result.empty())    // Guest 테이블에 데이터가 있을 경우
         {
-            lastGuestID = result;
+            lastGuestID = result; // 가장 최근에 생성된 Guest ID를 가져옴
         }
     }
 
@@ -60,6 +53,13 @@ std::string Database::generateGuestID()
     guestNum++;  // 숫자를 1 증가
 
     return "g" + std::to_string(guestNum);  // 새로운 Guest ID 생성
+}
+
+void Database::addGuest(const std::string& guestID, const std::string& carID)
+{
+    std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
+    std::unique_ptr<sql::Statement> stmt(con->createStatement());
+    stmt->execute(query);
 }
 
 void Database::enterCar(const std::string& carID, const std::string& carType)
@@ -87,13 +87,6 @@ void Database::enterCar(const std::string& carID, const std::string& carType)
         // Guest ID 생성
         std::string guestID = generateGuestID();  // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
 
-        // Guest 테이블에 차량 ID와 Guest ID 저장
-        std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
-        std::unique_ptr<sql::Statement> stmt(con->createStatement());
-        stmt->execute(query);
-
-        // Parking 테이블에 guest_id, enter_time, parking_status 값 저장
-        enterParking(guestID, now_c, "IN");
     }
 }
 
