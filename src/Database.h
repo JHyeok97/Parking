@@ -24,6 +24,8 @@ public:
     bool exitCar(const std::string &car_id, const std::string &payment_method);
     std::vector<std::vector<std::string>> queryData(const std::string &table_name);
     bool addMembers(std::string &member_id, std::string &car_id, std::string &member_name, std::string &address, std::string &phone_number, std::string &expiration_date);
+    sql::ResultSet *showMembers(const std::string &query);
+    bool deleteMembers(std::string &car_id);
     bool deleteData(const std::string &table_name, const std::string &attribute, const std::string &value);
 };
 
