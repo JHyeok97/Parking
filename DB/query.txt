@@ -21,9 +21,13 @@ CREATE TABLE Admin(
 
 CREATE TABLE Parking(
     parking_id INT AUTO_INCREMENT PRIMARY KEY,
+    guest_id CHAR(10),
+    member_id CHAR(10),
+    parking_status CHAR(10), 
+    enter_time DATETIME,
+    exit_time DATETIME,
     FOREIGN KEY (guest_id) REFERENCES Guest (guest_id),
-    FOREIGN KEY (member_id) REFERENCES Members (member_id),
-    enter_time DATETIME
+    FOREIGN KEY (member_id) REFERENCES Members (member_id)
 );
 
 CREATE TABLE Pay(
@@ -81,18 +85,25 @@ INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expir
 VALUES('JSY01', '54가1384', '정성연', '충청남도 논산시 내동 40-64', '010-8716-4435', 
        (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
 
+INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
+VALUES('HHH12', '18어1868', '한형탁', '제주도임 ㅋㅋ', '010-3578-9732', 
+       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
 
 
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('1', 'CSH56', '2020-04-15 07:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('2', 'JWS89', '2020-04-15 08:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('3', 'KCW90', '2020-04-15 09:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('4', 'JSY01', '2020-04-15 10:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('5', 'LJK12', '2020-04-15 10:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('6', 'LSH23', '2020-04-15 11:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('7', 'YHW34', '2020-04-15 11:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('8', 'CYE45', '2020-04-15 12:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('9', 'LWK67', '2020-04-15 12:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('10', 'KSM78', '2020-04-15 16:00:00');
+
+
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('1', 'CSH56', 'IN', '2020-04-15 07:00:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('2', 'JWS89', 'IN', '2020-04-15 08:00:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('3', 'KCW90', 'IN', '2020-04-15 09:30:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('4', 'JSY01', 'IN', '2020-04-15 10:00:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('5', 'LJK12', 'IN', '2020-04-15 10:30:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('6', 'LSH23', 'IN', '2020-04-15 11:00:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('7', 'YHW34', 'IN', '2020-04-15 11:30:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('8', 'CYE45', 'IN', '2020-04-15 12:00:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('9', 'LWK67', 'IN', '2020-04-15 12:30:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('10', 'KSM78', 'IN', '2020-04-15 16:00:00', NULL);
+INSERT INTO Parking(parking_id, guest_id, parking_status, enter_time, exit_time) VALUES('11', '11', 'IN', '2020-04-15 16:00:00', NULL);
+INSERT INTO Parking(parking_id, member_id, parking_status, enter_time, exit_time) VALUES('12', 'HHH12', 'IN',  '2023-06-08 12:00:00', NULL);
 
 
 INSERT INTO Guest(guest_id, car_id) VALUES('1', '12가1234');
@@ -105,6 +116,7 @@ INSERT INTO Guest(guest_id, car_id) VALUES('7', '45사5678');
 INSERT INTO Guest(guest_id, car_id) VALUES('8 ', '67아9012');
 INSERT INTO Guest(guest_id, car_id) VALUES('9', '89자3456');
 INSERT INTO Guest(guest_id, car_id) VALUES('10', '01차7890');
+INSERT INTO Guest(guest_id, car_id) VALUES('11', '13어1868');
 
 
 INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('1', 5000, '카드', '2020-04-15 07:00:00', '2020-04-15 10:00:00');
