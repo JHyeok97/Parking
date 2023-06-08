@@ -77,6 +77,20 @@ bool Database::addMembers(string &member_id, string &car_id, string &member_name
     return true;
 }
 
+sql::ResultSet *Database::showMembers(const std::string &query)
+{
+    sql::Statement *stmt = con->createStatement();
+    sql::ResultSet *res = stmt->executeQuery(query);
+    return res;
+}
+
+bool Database::deleteMembers(std::string &car_id)
+{
+    unique_ptr<sql::Statement> stmt(con->createStatement());
+    stmt->execute("DELETE FROM Members WHERE car_id = '" + car_id + "'");
+    return true;
+}
+
 bool Database::deleteData(const string &table_name, const string &attribute, const string &value)
 {
     unique_ptr<sql::Statement> stmt(con->createStatement());
