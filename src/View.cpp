@@ -47,9 +47,12 @@ void View::printTable(ftxui::Table &ftable)
     // Select row from the second to the last.
     auto content = ftable.SelectRows(1, -1);
     // Alternate in between 3 colors.
-    content.DecorateCellsAlternateRow(ftxui::color(ftxui::Color::Blue), 3, 0);
-    content.DecorateCellsAlternateRow(ftxui::color(ftxui::Color::Cyan), 3, 1);
-    content.DecorateCellsAlternateRow(ftxui::color(ftxui::Color::White), 3, 2);
+    content.DecorateCellsAlternateColumn(ftxui::color(ftxui::Color::Green), 6, 0);
+    content.DecorateCellsAlternateColumn(ftxui::color(ftxui::Color::RedLight), 6, 1);
+    content.DecorateCellsAlternateColumn(ftxui::color(ftxui::Color::White), 6, 2);
+    content.DecorateCellsAlternateColumn(ftxui::color(ftxui::Color::White), 6, 3);
+    content.DecorateCellsAlternateColumn(ftxui::color(ftxui::Color::White), 6, 4);
+    content.DecorateCellsAlternateColumn(ftxui::color(ftxui::Color::White), 6, 5);
 
     auto document = ftable.Render();
     auto screen = ftxui::Screen::Create(ftxui::Dimension::Fit(document));
