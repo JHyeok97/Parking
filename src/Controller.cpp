@@ -38,8 +38,8 @@ void Controller::enterCar()
 {
     while (true)
     {
-        string carID = view->getInput("차량 ID를 입력하세요: ");
-        cout << "입력한 차량 ID: " << carID << endl;
+        string carID = view->getInput("차량 번호를 입력하세요: ");
+        cout << "입력한 차량 번호: " << carID << endl;
         string confirm = view->getInput("맞습니까? (예/아니오): ");
         if (confirm == "예")
         {
@@ -66,6 +66,8 @@ void Controller::enterCar()
                 cout << "현재 시간: " << ctime(&now_c) << endl;
                 // Guest 데이터베이스에 값 저장
                 database->enterCar(carID, "Guest");
+                cin.ignore();
+                cin.ignore();
             }
             break;
         }

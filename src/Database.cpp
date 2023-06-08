@@ -33,6 +33,28 @@ bool Database::isMember(const std::string& carID, std::string& memberID)
     return false;
 }
 
+std::string Database::generateGuestID()
+{
+    std::string query = "SELECT MAX(guest_id) AS guest_id FROM Guest;";
+    std::unique_ptr<sql::Statement> stmt(con->createStatement());
+    std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(query));
+
+    std::string lastGuestID = "g0";  // Default value
+    if (res->next())
+    {
+        std::string result = res->getString("guest_id");
+        if (!result.empty())    // Check if the result is not NULL
+        {
+            lastGuestID = result;
+        }
+    }
+
+    int guestNum = std::stoi(lastGuestID.substr(1));  // "g" 다음의 숫자를 추출
+    guestNum++;  // 숫자를 1 증가
+
+    return "g" + std::to_string(guestNum);  // 새로운 Guest ID 생성
+}
+
 void Database::enterCar(const std::string& carID, const std::string& carType)
 {
     auto now = std::chrono::system_clock::now();
@@ -54,7 +76,11 @@ void Database::enterCar(const std::string& carID, const std::string& carType)
     }
     else if (carType == "Guest")
     {
-        std::string query = "INSERT INTO Guest (car_id) VALUES ('" + carID + "');";
+        // Guest ID 생성
+        std::string guestID = generateGuestID();  // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
+
+        // Guest 테이블에 차량 ID와 Guest ID 저장
+        std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
         std::unique_ptr<sql::Statement> stmt(con->createStatement());
         stmt->execute(query);
     }
