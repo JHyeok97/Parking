@@ -33,6 +33,13 @@ bool Database::isMember(const std::string& carID, std::string& memberID)
     return false;
 }
 
+void Database::addGuest(const std::string& guestID, const std::string& carID)
+{
+    std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
+    std::unique_ptr<sql::Statement> stmt(con->createStatement());
+    stmt->execute(query);
+}
+
 std::string Database::generateGuestID()
 {
     std::string query = "SELECT MAX(guest_id) AS guest_id FROM Guest;";
@@ -69,7 +76,8 @@ void Database::enterCar(const std::string& carID, const std::string& carType)
         std::string memberID;
         if (isMember(carID, memberID))
         {
-            std::string query = "INSERT INTO Parking (member_id, enter_time) VALUES ('" + memberID + "', '" + currentTime + "');";
+            // Member일 경우에도 Parking 테이블에 parking_status를 "IN"으로 설정
+            std::string query = "INSERT INTO Parking (member_id, enter_time, parking_status) VALUES ('" + memberID + "', '" + currentTime + "', 'IN');";
             std::unique_ptr<sql::Statement> stmt(con->createStatement());
             stmt->execute(query);
         }
@@ -83,8 +91,25 @@ void Database::enterCar(const std::string& carID, const std::string& carType)
         std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
         std::unique_ptr<sql::Statement> stmt(con->createStatement());
         stmt->execute(query);
+
+        // Parking 테이블에 guest_id, enter_time, parking_status 값 저장
+        enterParking(guestID, now_c, "IN");
     }
 }
+
+void Database::enterParking(const std::string& guestID, const std::time_t& enterTime, const std::string& parkingStatus)
+{
+    std::tm* enterTime_tm = std::localtime(&enterTime);
+    std::stringstream ss;
+    ss << std::put_time(enterTime_tm, "%F %T");
+    std::string enterTimeString = ss.str();
+
+    std::string query = "INSERT INTO Parking (guest_id, enter_time, parking_status) VALUES ('" + guestID + "', '" + enterTimeString + "', '" + parkingStatus + "');";
+    std::unique_ptr<sql::Statement> stmt(con->createStatement());
+    stmt->execute(query);
+}
+
+
 
 bool Database::exitCar(const std::string &car_id, const std::string &payment_method)
 {

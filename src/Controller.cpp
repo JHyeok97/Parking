@@ -64,8 +64,13 @@ void Controller::enterCar()
                 auto now = chrono::system_clock::now();
                 auto now_c = chrono::system_clock::to_time_t(now);
                 cout << "현재 시간: " << ctime(&now_c) << endl;
-                // Guest 데이터베이스에 값 저장
+                // Guest ID 생성
+                std::string guestID = database->generateGuestID();  // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
+                // Guest 테이블에 차량 ID와 Guest ID 저장
+                database->addGuest(guestID, carID);
+                // Parking 테이블에 값 저장
                 database->enterCar(carID, "Guest");
+                database->enterParking(guestID, now_c, "IN");
                 cin.ignore();
                 cin.ignore();
             }
@@ -81,6 +86,7 @@ void Controller::enterCar()
         }
     }
 }
+
 
 // 차량 출차 처리 메소드 구현
 void Controller::exitCar()
