@@ -24,12 +24,9 @@ void Controller::run()
             exitCar();
             break;
         case 3:
-            calculate();
-            break;
-        case 4:
             manageData();
             break;
-        case 5:
+        case 4:
             return;
         default:
             cout << "Invalid choice\n";
@@ -56,6 +53,9 @@ void Controller::enterCar()
                 cout << "현재 시간: " << ctime(&now_c) << endl;
                 // Parking 데이터베이스에 값 저장
                 database->enterCar(carID, "Member");
+                cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
+                cin.ignore();
+                cin.ignore();
             }
             else
             {

@@ -8,9 +8,8 @@ int View::showMenu()
     system("clear");
     cout << "1. 입차" << endl;
     cout << "2. 출차" << endl;
-    cout << "3. 정산하기" << endl;
-    cout << "4. 회원 관리" << endl;
-    cout << "5. 종료" << endl;
+    cout << "3. 회원 관리" << endl;
+    cout << "4. 종료" << endl;
     cout << "\n선택: ";
     cin >> choice;
 
