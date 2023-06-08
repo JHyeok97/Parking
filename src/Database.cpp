@@ -18,33 +18,43 @@ Database::~Database()
     delete con;
 }
 
-bool Database::isMember(const std::string &carID)
+bool Database::isMember(const std::string& carID, std::string& memberID)
 {
     std::string query = "SELECT * FROM Members WHERE car_id = '" + carID + "';";
-    std::unique_ptr<sql::Statement> stmt(con->createStatement());   // SQL 문을 실행할 Statement 객체 생성
-    std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(query)); // 쿼리를 실행하고 결과를 받습니다.
-    return res->next();                                             // 결과가 있으면 true, 없으면 false를 반환합니다.
+    std::unique_ptr<sql::Statement> stmt(con->createStatement());
+    std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(query));
+    
+    if (res->next())
+    {
+        memberID = res->getString("member_id");
+        return true;
+    }
+    
+    return false;
 }
 
-void Database::enterCar(const std::string &carID, const std::string &carType)
+void Database::enterCar(const std::string& carID, const std::string& carType)
 {
-    // 현재 시간을 얻습니다.
     auto now = std::chrono::system_clock::now();
     auto now_c = std::chrono::system_clock::to_time_t(now);
-    std::tm *now_tm = std::localtime(&now_c);
+    std::tm* now_tm = std::localtime(&now_c);
     std::stringstream ss;
     ss << std::put_time(now_tm, "%F %T");
     std::string currentTime = ss.str();
-    // carType에 따라 적절한 데이터베이스에 carID와 현재 시간을 저장합니다.
+    
     if (carType == "Member")
     {
-        std::string query = "INSERT INTO Parking (member_id, enter_time) VALUES ('" + carID + "', '" + currentTime + "');";
-        // 쿼리를 실행합니다.
+        std::string memberID;
+        if (isMember(carID, memberID))
+        {
+            std::string query = "INSERT INTO Parking (member_id, enter_time) VALUES ('" + memberID + "', '" + currentTime + "');";
+            std::unique_ptr<sql::Statement> stmt(con->createStatement());
+            stmt->execute(query);
+        }
     }
     else if (carType == "Guest")
     {
         std::string query = "INSERT INTO Guest (car_id) VALUES ('" + carID + "');";
-        // 쿼리를 실행합니다.
         std::unique_ptr<sql::Statement> stmt(con->createStatement());
         stmt->execute(query);
     }

@@ -46,13 +46,14 @@ void Controller::enterCar()
         string confirm = view->getInput("맞습니까? (예/아니오): ");
         if (confirm == "예")
         {
-            if (database->isMember(carID))
+            string memberID; // 멤버 ID를 저장할 변수를 추가합니다.
+            if (database->isMember(carID, memberID))
             {
                 cout << "PASS 가입자 입니다." << endl;
                 // 현재 시간 출력
                 auto now = chrono::system_clock::now();
                 auto now_c = chrono::system_clock::to_time_t(now);
-                std::cout << "현재 시간: " << ctime(&now_c) << endl;
+                cout << "현재 시간: " << ctime(&now_c) << endl;
                 // Parking 데이터베이스에 값 저장
                 database->enterCar(carID, "Member");
             }
