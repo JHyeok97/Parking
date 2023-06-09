@@ -3,6 +3,7 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <iomanip>
 
 using namespace std;
 
@@ -24,12 +25,9 @@ void Controller::run()
             exitCar();
             break;
         case 3:
-            calculate();
-            break;
-        case 4:
             manageData();
             break;
-        case 5:
+        case 4:
             return;
         default:
             cout << "Invalid choice\n";
@@ -41,20 +39,25 @@ void Controller::enterCar()
 {
     while (true)
     {
-        string carID = view->getInput("차량 ID를 입력하세요: ");
-        cout << "입력한 차량 ID: " << carID << endl;
+        string carID = view->getInput("차량 번호를 입력하세요: ");
+        cout << "입력한 차량 번호: " << carID << endl;
         string confirm = view->getInput("맞습니까? (예/아니오): ");
         if (confirm == "예")
         {
-            if (database->isMember(carID))
+            string memberID; // 멤버 ID를 저장할 변수를 추가합니다.
+            if (database->isMember(carID, memberID))
             {
                 cout << "PASS 가입자 입니다." << endl;
                 // 현재 시간 출력
                 auto now = chrono::system_clock::now();
                 auto now_c = chrono::system_clock::to_time_t(now);
-                std::cout << "현재 시간: " << ctime(&now_c) << endl;
+                tm *ltm = localtime(&now_c);
+                cout << "현재 시간: " << 1900 + ltm->tm_year << "년 " << 1 + ltm->tm_mon << "월 " << ltm->tm_mday << "일 " << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec << endl;
                 // Parking 데이터베이스에 값 저장
                 database->enterCar(carID, "Member");
+                cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
+                cin.ignore();
+                cin.ignore();
             }
             else
             {
@@ -62,9 +65,20 @@ void Controller::enterCar()
                 // 현재 시간 출력
                 auto now = chrono::system_clock::now();
                 auto now_c = chrono::system_clock::to_time_t(now);
-                cout << "현재 시간: " << ctime(&now_c) << endl;
-                // Guest 데이터베이스에 값 저장
+                tm *ltm = localtime(&now_c);
+                cout << "현재 시간: " << 1900 + ltm->tm_year << "년 " << 1 + ltm->tm_mon << "월 " << ltm->tm_mday << "일 " << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec << endl;
+                // Guest ID 생성
+                std::string guestID = database->generateGuestID();  // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
+                // Guest 테이블에 차량 ID와 Guest ID 저장
+                database->addGuest(guestID, carID);
+                // Parking 테이블에 값 저장
                 database->enterCar(carID, "Guest");
+                // Parking 테이블에 guest_id, enter_time, parking_status 값 저장
+                database->enterParking(guestID, now_c, "IN");
+
+                cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
+                cin.ignore();
+                cin.ignore();
             }
             break;
         }
@@ -78,6 +92,9 @@ void Controller::enterCar()
         }
     }
 }
+
+
+
 
 // 차량 출차 처리 메소드 구현
 void Controller::exitCar()
