@@ -40,6 +40,7 @@ void Controller::enterCar()
 {
     while (true)
     {
+        system("clear");
         string carID = view->getInput("차량 번호를 입력하세요: ");
         cout << "입력한 차량 번호: " << carID << endl;
         string confirm = view->getInput("맞습니까? (예/아니오): ");
@@ -62,6 +63,7 @@ void Controller::enterCar()
             }
             else
             {
+                system("clear");
                 cout << "GUEST 입니다." << endl;
                 // 현재 시간 출력
                 auto now = chrono::system_clock::now();
@@ -89,12 +91,11 @@ void Controller::enterCar()
         }
         else
         {
+            system("clear");
             cout << "잘못된 입력입니다. 다시 입력해주세요." << endl;
         }
     }
 }
-
-
 
 std::chrono::system_clock::time_point parseDateTime(const string dateTimeStr)
 {
@@ -108,6 +109,7 @@ void Controller::calculate()
 {
     // 차량번호 입력
     string car_id;
+    system("clear");
     cout << "차량번호를 입력하세요: ";
     cin >> car_id;
 
@@ -127,6 +129,7 @@ void Controller::calculate()
     {
         database->out_time(exit_time, car_id);
         cout << "정기차량입니다. 안녕히 가십시오." << endl;
+        cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
 
         cin.ignore();
         cin.ignore();
@@ -135,6 +138,7 @@ void Controller::calculate()
     {
 
         // 입차시간, 출차시간(현재시간) 출력
+        system("clear");
         cout << "방문차량입니다." << endl;
         cout << "입차 시간: " << enter_time << endl;
         cout << "현재 시간: " << exit_time << endl;
@@ -163,24 +167,30 @@ void Controller::calculate()
             cin >> payment;
             if (payment == "카드")
             {
+                system("clear");
                 database->out_time(exit_time, car_id);
                 database->Pay(exit_time, car_id, enter_time, payment, parkingFee);
-                cout << "카드결제되었습니다.좋은하루되세요." << endl;
+                cout << "카드결제 되었습니다.\n좋은 하루 되세요." << endl;
+                cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
                 cin.ignore();
                 cin.ignore();
             }
             else if (payment == "현금")
             {
+                system("clear");
                 database->out_time(exit_time, car_id);
                 database->Pay(exit_time, car_id, enter_time, payment, parkingFee);
-                cout << "현금결제되었습니다.좋은하루되세요." << endl;
+                cout << "현금결제 되었습니다.\n좋은 하루 되세요." << endl;
+                cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
                 cin.ignore();
                 cin.ignore();
             }
         }
         else if (out == "아니오")
         {
+            system("clear");
             cout << "나가실때 정산 부탁드립니다." << endl;
+            cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
             cin.ignore();
             cin.ignore();
         }
@@ -230,6 +240,7 @@ void Controller::manageData()
             string expiration_date_str(expiration_date);
             cin.ignore(); // 버퍼 초기화
 
+            system("clear");
             cout << "member id : ";
             getline(cin, member_id);
             cout << "car id : ";
@@ -243,8 +254,9 @@ void Controller::manageData()
 
             if (database->addMembers(member_id, car_id, member_name, address, phone_number, expiration_date_str))
             {
+                system("clear");
                 cout << car_id << " 차량 회원 등록이 완료되었습니다." << endl;
-                cout << "Enter 입력 시 처음 화면으로..." << endl;
+                cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
                 cin.ignore();
                 cin.ignore();
             };
@@ -273,7 +285,7 @@ void Controller::manageData()
             ftxui::Table ftable = table;
             view->printTable(ftable);
 
-            cout << "\nEnter 입력 시 처음 화면으로..." << endl;
+            cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
             cin.ignore();
             cin.ignore();
 
@@ -302,16 +314,18 @@ void Controller::manageData()
             }
             else
             {
+                system("clear");
                 cout << "회원을 찾을 수 없습니다." << endl;
                 cout << endl;
             }
 
-            cout << "Enter 입력 시 처음 화면으로..." << endl;
+            cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
             cin.ignore();
             break;
         }
         case 4:
         { // 회원 삭제
+            system("clear");
             cout << "차량 번호 :";
             cin.ignore();
             getline(cin, car_id);
@@ -328,8 +342,9 @@ void Controller::manageData()
     }
     else
     {
+        system("clear");
         cout << "Wrong Password!\n";
-        cout << "Enter 입력 시 처음 화면으로..." << endl;
+        cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
         cin.ignore();
         cin.ignore();
     }
