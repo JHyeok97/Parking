@@ -1,17 +1,17 @@
-CREATE TABLE Guest(
-    guest_id CHAR(10) PRIMARY KEY,
-    car_id CHAR(10)
-);
-
-CREATE TABLE Members(
-    member_id CHAR(10) PRIMARY KEY,
-    car_id CHAR(10),
-    member_name CHAR(13),
-    address CHAR(50),
-    phone_number CHAR(13),
-    expiration_date DATE
-);
-
+   CREATE TABLE Guest(
+       guest_id CHAR(10) PRIMARY KEY,
+       car_id CHAR(10)
+   );
+   
+   CREATE TABLE Members(
+       member_id CHAR(10) PRIMARY KEY,
+       car_id CHAR(10),
+       member_name CHAR(13),
+       address CHAR(50),
+       phone_number CHAR(13),
+       expiration_date DATE
+   );
+   
 CREATE TABLE Admin(
     admin_id CHAR(10) PRIMARY KEY,
     admin_name CHAR(10),
@@ -19,102 +19,44 @@ CREATE TABLE Admin(
     e_mail CHAR(30)
 );
 
-CREATE TABLE Parking(
-    parking_id INT AUTO_INCREMENT PRIMARY KEY,
-    guest_id CHAR(10),
-    member_id CHAR(10),
-    enter_time DATETIME,
-    FOREIGN KEY (guest_id) REFERENCES Guest (guest_id),
-    FOREIGN KEY (member_id) REFERENCES Members (member_id)
-);
-
-CREATE TABLE Pay(
-    guest_id CHAR(10),
-    parking_fee DECIMAL(10),
-    payment CHAR(10),
-    enter_time DATETIME,
-    exit_time DATETIME,
-    FOREIGN KEY (guest_id) REFERENCES Guest (guest_id)
-); 
-
-
-INSERT INTO Admin(admin_id, admin_name, admin_phone, e_mail) VALUES('Alpha', '김일층', '010-3352-7351', 'wkek54@naver.com');
-INSERT INTO Admin(admin_id, admin_name, admin_phone, e_mail) VALUES('Beta', '박이층', '010-8874-5663', 'cngks123@naver.com');
-
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('LJK12', '42머6325', '이재근', '충청남도 논산시 내동 30-1', '010-4704-2874', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('LSH23', '18가1029', '이성호', '충청남도 논산시 내동 98-4', '010-8497-4884', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('YHW34', '20사2837', '윤효원', '충청남도 논산시 와야리 26-3', '010-7911-1466', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('CYE45', '96로4651', '최여은', '충청남도 논산시 와야리 125', '010-8916-5564', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('CSH56', '79나9876', '최서현', '충청남도 논산시 내동 45-1', '010-9495-2577', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('LWK67', '66자1646', '이용경', '충청남도 논산시 와야리 246-5', '010-4957-1948', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('KSM78', '12거1846', '김신명', '충청남도 논산시 내동 시민로 132', '010-6852-4915', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('JWS89', '49모7979', '장원석', '충청남도 논산시 내동 33-5', '010-7738-4957', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('KCW90', '88아9487', '김찬우', '충청남도 논산시 내동 47-1', '010-2598-5594', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
-VALUES('JSY01', '54가1384', '정성연', '충청남도 논산시 내동 40-64', '010-8716-4435', 
-       (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
-
-
-
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('1', 'CSH56', '2020-04-15 07:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('2', 'JWS89', '2020-04-15 08:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('3', 'KCW90', '2020-04-15 09:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('4', 'JSY01', '2020-04-15 10:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('5', 'LJK12', '2020-04-15 10:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('6', 'LSH23', '2020-04-15 11:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('7', 'YHW34', '2020-04-15 11:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('8', 'CYE45', '2020-04-15 12:00:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('9', 'LWK67', '2020-04-15 12:30:00');
-INSERT INTO Parking(parking_id, member_id, enter_time) VALUES('10', 'KSM78', '2020-04-15 16:00:00');
-
-
-INSERT INTO Guest(guest_id, car_id) VALUES('1', '12가1234');
-INSERT INTO Guest(guest_id, car_id) VALUES('2', '34나5678');
-INSERT INTO Guest(guest_id, car_id) VALUES('3', '56다9012');
-INSERT INTO Guest(guest_id, car_id) VALUES('4', '78라3456');
-INSERT INTO Guest(guest_id, car_id) VALUES('5', '90마7890');
-INSERT INTO Guest(guest_id, car_id) VALUES('6', '23바1234');
-INSERT INTO Guest(guest_id, car_id) VALUES('7', '45사5678');
-INSERT INTO Guest(guest_id, car_id) VALUES('8 ', '67아9012');
-INSERT INTO Guest(guest_id, car_id) VALUES('9', '89자3456');
-INSERT INTO Guest(guest_id, car_id) VALUES('10', '01차7890');
-
-
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('1', 5000, '카드', '2020-04-15 07:00:00', '2020-04-15 10:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('2', 6000, '카드', '2020-04-15 08:00:00', '2020-04-15 22:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('3', 6000, '현금', '2020-04-15 09:30:00', '2020-04-15 16:30:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('4', 4000, '카드', '2020-04-15 10:00:00', '2020-04-15 14:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('5', 1000, '카드', '2020-04-15 10:30:00', '2020-04-15 23:30:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('6', 3000, '카드', '2020-04-15 11:00:00', '2020-04-15 14:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('7', 4000, '현금', '2020-04-15 11:30:00', '2020-04-15 15:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('8', 5250, '카드', '2020-04-15 12:00:00', '2020-04-15 18:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('9', 5000, '카드', '2020-04-15 12:30:00', '2020-04-15 21:00:00');
-INSERT INTO Pay(guest_id, parking_fee, payment, enter_time, exit_time) VALUES('10', 5000, '카드', '2020-04-15 16:00:00', '2020-04-15 20:00:00');
+   CREATE TABLE Parking(
+       parking_id INT AUTO_INCREMENT PRIMARY KEY,
+       guest_id CHAR(10),
+       member_id CHAR(10),
+       enter_time DATETIME,
+       exit_time DATETIME,
+       Parking_status CHAR(5),
+       FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
+       FOREIGN KEY (member_id) REFERENCES Members(member_id)
+   );
+   
+   
+   CREATE TABLE Pay(
+       pay_id INT AUTO_INCREMENT PRIMARY KEY,
+       parking_id INT,
+       guest_id CHAR(10),
+       parking_fee DECIMAL(10),
+       payment CHAR(10),
+       enter_time DATETIME,
+       exit_time DATETIME,
+       FOREIGN KEY (parking_id) REFERENCES Parking(parking_id),
+       FOREIGN KEY (guest_id) REFERENCES Guest(guest_id)
+   );
+   
+   
+   
+   INSERT INTO Admin(admin_id, admin_name, admin_phone, e_mail) VALUES('Alpha', '김일층', '010-3352-7351', 'wkek54@naver.com');
+   INSERT INTO Admin(admin_id, admin_name, admin_phone, e_mail) VALUES('Beta', '박이층', '010-8874-5663', 'cngks123@naver.com');
+   
+   
+   INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
+   VALUES('LJK12', '42머6325', '이재근', '충청남도 논산시 내동 30-1', '010-4704-2874', 
+          (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
+   
+   INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
+   VALUES('LSH23', '18가1029', '이성호', '충청남도 논산시 내동 98-4', '010-8497-4884', 
+          (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
+   
+   INSERT INTO Members(member_id, car_id, member_name, address, phone_number, expiration_date) 
+   VALUES('YHW34', '20사2837', '윤효원', '충청남도 논산시 와야리 26-3', '010-7911-1466', 
+          (CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH + INTERVAL FLOOR(1 + (DAY(LAST_DAY(CURDATE() + INTERVAL FLOOR(6* RAND()) MONTH)) -1)* RAND()) DAY));
