@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <sstream>
 #include <ctime>
 #include <sstream>
 #include <termios.h>
@@ -125,7 +126,6 @@ void Controller::calculate()
     string exit_time = oss.str();
 
     string enter_time = database->calculate(car_id);
-
     int check = database->check(car_id);
 
     if (check == 1)
@@ -137,7 +137,7 @@ void Controller::calculate()
         cin.ignore();
         cin.ignore();
     }
-    else
+    else if(check == 0)
     {
 
         // 입차시간, 출차시간(현재시간) 출력
@@ -157,7 +157,7 @@ void Controller::calculate()
 
         // 주차 요금 계산
         int parkingRate = 5000.0; // 시간당 요금 (3000원)
-        int parkingFee = parkingDuration * parkingRate;
+        int parkingFee = parkingDuration * parkingRate + 3000;
         cout << "사용요금 : " << parkingFee << "원 입니다." << endl;
 
         string out;

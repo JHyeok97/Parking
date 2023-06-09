@@ -18,18 +18,18 @@ Database::~Database()
     delete con;
 }
 
-bool Database::isMember(const std::string& carID, std::string& memberID)
+bool Database::isMember(const std::string &carID, std::string &memberID)
 {
     std::string query = "SELECT * FROM Members WHERE car_id = '" + carID + "';";
     std::unique_ptr<sql::Statement> stmt(con->createStatement());
     std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(query));
-    
+
     if (res->next())
     {
         memberID = res->getString("member_id");
         return true;
     }
-    
+
     return false;
 }
 
@@ -39,30 +39,30 @@ std::string Database::generateGuestID()
     std::unique_ptr<sql::Statement> stmt(con->createStatement());
     std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(query));
 
-    std::string lastGuestID = "g0";  // Default value
+    std::string lastGuestID = "g0"; // Default value
     if (res->next())
     {
         std::string result = res->getString("guest_id"); //
-        if (!result.empty())    // Guest 테이블에 데이터가 있을 경우
+        if (!result.empty())                             // Guest 테이블에 데이터가 있을 경우
         {
             lastGuestID = result; // 가장 최근에 생성된 Guest ID를 가져옴
         }
     }
 
-    int guestNum = std::stoi(lastGuestID.substr(1));  // "g" 다음의 숫자를 추출
-    guestNum++;  // 숫자를 1 증가
+    int guestNum = std::stoi(lastGuestID.substr(1)); // "g" 다음의 숫자를 추출
+    guestNum++;                                      // 숫자를 1 증가
 
-    return "g" + std::to_string(guestNum);  // 새로운 Guest ID 생성
+    return "g" + std::to_string(guestNum); // 새로운 Guest ID 생성
 }
 
-void Database::addGuest(const std::string& guestID, const std::string& carID)
+void Database::addGuest(const std::string &guestID, const std::string &carID)
 {
     std::string query = "INSERT INTO Guest (guest_id, car_id) VALUES ('" + guestID + "', '" + carID + "');";
     std::unique_ptr<sql::Statement> stmt(con->createStatement());
     stmt->execute(query);
 }
 
-void Database::enterCar(const std::string& carID, const std::string& carType)
+void Database::enterCar(const std::string &carID, const std::string &carType)
 {
     auto now = std::chrono::system_clock::now();
     auto now_c = std::chrono::system_clock::to_time_t(now);
@@ -70,7 +70,7 @@ void Database::enterCar(const std::string& carID, const std::string& carType)
     std::stringstream ss;
     ss << std::put_time(now_tm, "%F %T");
     std::string currentTime = ss.str();
-    
+
     if (carType == "Member")
     {
         std::string memberID;
@@ -85,14 +85,13 @@ void Database::enterCar(const std::string& carID, const std::string& carType)
     else if (carType == "Guest")
     {
         // Guest ID 생성
-        std::string guestID = generateGuestID();  // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
-
+        std::string guestID = generateGuestID(); // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
     }
 }
 
-void Database::enterParking(const std::string& guestID, const std::time_t& enterTime, const std::string& parkingStatus)
+void Database::enterParking(const std::string &guestID, const std::time_t &enterTime, const std::string &parkingStatus)
 {
-    std::tm* enterTime_tm = std::localtime(&enterTime);
+    std::tm *enterTime_tm = std::localtime(&enterTime);
     std::stringstream ss;
     ss << std::put_time(enterTime_tm, "%F %T");
     std::string enterTimeString = ss.str();
@@ -101,7 +100,6 @@ void Database::enterParking(const std::string& guestID, const std::time_t& enter
     std::unique_ptr<sql::Statement> stmt(con->createStatement());
     stmt->execute(query);
 }
-
 
 vector<std::vector<std::string>> Database::queryData(const std::string &table_name)
 {
@@ -237,24 +235,31 @@ int Database::check(const string &car_id)
     string member_id;
 
     // Guest 테이블에서 car_id 검색
-    unique_ptr<sql::Statement> stmt(con->createStatement());
-    unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT guest_id FROM Guest WHERE car_id = '" + car_id + "'"));
+    std::unique_ptr<sql::Statement> stmt(con->createStatement());
+    std::unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT guest_id FROM Guest WHERE car_id = '" + car_id + "'"));
 
     if (res->next())
     {
+        std::string query = "SELECT MAX(guest_id) AS guest_id FROM Guest WHERE car_id = '" + car_id + "'";
+        std::unique_ptr<sql::Statement> stmt2(con->createStatement());
+        std::unique_ptr<sql::ResultSet> res2(stmt2->executeQuery(query));
         // car_id가 Guest 테이블에 존재하는 경우
-        guest_id = res->getString("guest_id");
+        if (res2->next())
+        {
+            guest_id = res2->getString("guest_id");
+            cout << guest_id << endl;
+        }
 
         return 0;
     }
     else
     {
         // car_id가 Guest 테이블에 없는 경우, Members 테이블에서 찾기
-        unique_ptr<sql::ResultSet> res2(stmt->executeQuery("SELECT member_id FROM Members WHERE car_id = '" + car_id + "'"));
+        std::unique_ptr<sql::ResultSet> res3(stmt->executeQuery("SELECT member_id FROM Members WHERE car_id = '" + car_id + "'"));
 
-        if (res2->next())
+        if (res3->next())
         {
-            member_id = res2->getString("member_id");
+            member_id = res3->getString("member_id");
             return 1;
         }
         else
@@ -265,32 +270,53 @@ int Database::check(const string &car_id)
 }
 
 // 나갈때 Parking테이블의 parking_status와 exit_time을 변경
-bool Database::out_time(const string& exit_time, const string& car_id) {
+bool Database::out_time(const string &exit_time, const string &car_id)
+{
     string guest_id;
     string member_id;
+    string query;
 
     // Guest 테이블에서 car_id 검색
-    unique_ptr<sql::Statement> stmt(con->createStatement());
-    unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT guest_id FROM Guest WHERE car_id = '" + car_id + "'"));
+    unique_ptr<sql::Statement> guestStmt(con->createStatement());
+    unique_ptr<sql::ResultSet> guestRes(guestStmt->executeQuery("SELECT guest_id FROM Guest WHERE car_id = '" + car_id + "'"));
 
-    string query; // query 변수를 선언하여 범위를 변경함
-
-    if (res->next()) {
+    if (guestRes->next())
+    {
         // car_id가 Guest 테이블에 존재하는 경우
-        guest_id = res->getString("guest_id");
-        query = "UPDATE Parking SET parking_status = 'OUT', exit_time = '" + exit_time + "' WHERE guest_id = '" + guest_id + "'";
-    } else {
-        // car_id가 Guest 테이블에 없는 경우, Members 테이블에서 찾기
-        unique_ptr<sql::ResultSet> res2(stmt->executeQuery("SELECT member_id FROM Members WHERE car_id = '" + car_id + "'"));
+        string guestQuery = "SELECT MAX(guest_id) AS guest_id FROM Guest WHERE car_id = '" + car_id + "'";
+        unique_ptr<sql::Statement> guestMaxStmt(con->createStatement());
+        unique_ptr<sql::ResultSet> guestMaxRes(guestMaxStmt->executeQuery(guestQuery));
 
-        if (res2->next()) {
-            member_id = res2->getString("member_id");
-            cout << member_id << endl;
-            query = "UPDATE Parking SET parking_status = 'OUT', exit_time = '" + exit_time + "' WHERE member_id = '" + member_id + "'";
+        if (guestMaxRes->next())
+        {
+            guest_id = guestMaxRes->getString("guest_id");
+            query = "UPDATE Parking SET parking_status = 'OUT', exit_time = '" + exit_time + "' WHERE guest_id = '" + guest_id + "'";
+        }
+    }
+    else
+    {
+        // car_id가 Guest 테이블에 없는 경우, Members 테이블에서 찾기
+        unique_ptr<sql::Statement> memberStmt(con->createStatement());
+        unique_ptr<sql::ResultSet> memberRes(memberStmt->executeQuery("SELECT member_id FROM Members WHERE car_id = '" + car_id + "'"));
+
+        if (memberRes->next())
+        {
+            member_id = memberRes->getString("member_id");
+
+            unique_ptr<sql::Statement> memberStmt1(con->createStatement());
+            unique_ptr<sql::ResultSet> memberRes1(memberStmt1->executeQuery("SELECT MAX(parking_id) AS max_parking_id FROM Parking WHERE member_id = '" + member_id + "'"));
+
+            if (memberRes1->next())
+            {
+                string max_parking_id = memberRes1->getString("max_parking_id");
+                // 이후 작업 수행
+                query = "UPDATE Parking SET parking_status = 'OUT', exit_time = '" + exit_time + "' WHERE parking_id = '" + max_parking_id + "'";
+            }
         }
     }
 
-    if (!query.empty()) {
+    if (!query.empty())
+    {
         unique_ptr<sql::Statement> updateStmt(con->createStatement());
         updateStmt->executeUpdate(query);
     }
@@ -298,12 +324,13 @@ bool Database::out_time(const string& exit_time, const string& car_id) {
     return true;
 }
 
-bool Database::Pay(const string& exit_time, const string& car_id, const string& enter_time, const string& payment, const int& parking_fee)
+bool Database::Pay(const string &exit_time, const string &car_id, const string &enter_time, const string &payment, const int &parking_fee)
 {
     string guest_id;
     unique_ptr<sql::Statement> stmt(con->createStatement());
     unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT guest_id FROM Guest WHERE car_id = '" + car_id + "'"));
-    if (res->next()) {
+    if (res->next())
+    {
         guest_id = res->getString("guest_id");
         string query = "INSERT INTO Pay (guest_id, parking_fee, payment, enter_time, exit_time) VALUES ('" + guest_id + "', '" + to_string(parking_fee) + "' , '" + payment + "', '" + enter_time + "', '" + exit_time + "');";
 
@@ -314,4 +341,3 @@ bool Database::Pay(const string& exit_time, const string& car_id, const string& 
     }
     return false;
 }
-
