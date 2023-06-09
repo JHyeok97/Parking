@@ -30,6 +30,12 @@ public:
     sql::ResultSet *showMembers(const std::string &query);
     bool deleteMembers(std::string &car_id);
     bool deleteData(const std::string &table_name, const std::string &attribute, const std::string &value);
+    std::string calculate(const std::string& car_id);
+    std::string guest_id(const std::string& guest_id);
+    std::string member_id(const std::string& member_id);
+    int check(const std::string &car_id);
+    bool out_time(const std::string& exit_time, const std::string& car_id);
+    bool Pay(const std::string& exit_time, const std::string& car_id, const std::string& guest_id, const std::string& payment, const int& parking_fee);
 };
 
 #endif // DATABASE_H

@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <ctime>
 
 using namespace std;
 
@@ -113,40 +114,85 @@ void Controller::exitCar()
 
 void Controller::calculate()
 {
-    // 정산 코드
+    // 차량번호 입력
+    string car_id;
+    cout << "차량번호를 입력하세요: ";
+    cin >> car_id;
 
-    // 입차 시간 입력
-    time_t enterTime;
-    cout << "입차 시간을 입력하세요 (예: 2023-06-07 10:30:00): "; // 이거 db에서 값 빼오는걸로 수정해야함
-    string enterTimeString;
-    cin.ignore(); // 이전 입력 버퍼 비우기
-    getline(cin, enterTimeString);
-    struct tm enterTM;
-    strptime(enterTimeString.c_str(), "%Y-%m-%d %H:%M:%S", &enterTM);
-    enterTime = mktime(&enterTM);
+    // 출차 시간 확인
+    auto now = chrono::system_clock::now();
+    auto now_c = chrono::system_clock::to_time_t(now);
+    tm *current_time = localtime(&now_c);
+    ostringstream oss;
+    oss << std::put_time(current_time, "%Y-%m-%d %H:%M:%S");
+    string exit_time = oss.str();
 
-    // 출차 시간 입력
-    time_t exitTime;
-    cout << "출차 시간을 입력하세요 (예: 2023-06-07 14:45:00): "; // 이거 db에서 값 빼오는걸로 수정해야함
-    string exitTimeString;
-    getline(cin, exitTimeString);
-    struct tm exitTM;
-    strptime(exitTimeString.c_str(), "%Y-%m-%d %H:%M:%S", &exitTM);
-    exitTime = mktime(&exitTM);
+    string enter_time = database->calculate(car_id);
 
-    // 주차 시간 계산
-    double parkingDuration = difftime(exitTime, enterTime) / 3600.0; // 시간 단위로 변환
+    int check = database->check(car_id);
 
-    // 주차 요금 계산
-    double parkingRate = 3000.0; // 시간당 요금 (3000원)
-    double parkingFee = parkingDuration * parkingRate;
+    if (check == 1)
+    {
+        database->out_time(exit_time, car_id);
+        cout << "정기차량입니다. 안녕히 가십시오." << endl;
 
-    // 출차 정보 출력
-    cout << "출차 시간: " << exitTimeString << endl;
-    cout << "주차 시간: " << parkingDuration << "시간" << endl;
-    cout << "주차 요금: " << parkingFee << "원" << endl;
+        cin.ignore();
+        cin.ignore();
+    }
+    else
+    {
 
-    // db데이터 연결해야함
+        // 입차시간, 출차시간(현재시간) 출력
+        cout << "방문차량입니다." << endl;
+        cout << "입차 시간: " << enter_time << endl;
+        cout << "현재 시간: " << exit_time << endl;
+
+        chrono::system_clock::time_point time1 = parseDateTime(enter_time);
+        chrono::system_clock::time_point time2 = parseDateTime(exit_time);
+
+        chrono::duration<double> duration = time2 - time1;
+        double timeDiff = duration.count();
+
+        int parkingDuration = timeDiff / 3600.0; // 시간 단위로 변환
+        cout << "사용시간 : " << parkingDuration << "시간 입니다." << endl;
+
+        // 주차 요금 계산
+        int parkingRate = 5000.0; // 시간당 요금 (3000원)
+        int parkingFee = parkingDuration * parkingRate;
+        cout << "사용요금 : " << parkingFee << "원 입니다." << endl;
+
+        string out;
+        cout << "출차 하시겠습니까?? (예/아니오) " << endl;
+        cin >> out;
+        if (out == "예")
+        {
+            string payment;
+            cout << "결제방식 (카드/현금) " << endl;
+            cin >> payment;
+            if (payment == "카드")
+            {
+                database->out_time(exit_time, car_id);
+                database->Pay(exit_time, car_id, enter_time, payment, parkingFee);
+                cout << "카드결제되었습니다.좋은하루되세요." << endl;
+                cin.ignore();
+                cin.ignore();
+            }
+            else if (payment == "현금")
+            {
+                database->out_time(exit_time, car_id);
+                database->Pay(exit_time, car_id, enter_time, payment, parkingFee);
+                cout << "현금결제되었습니다.좋은하루되세요." << endl;
+                cin.ignore();
+                cin.ignore();
+            }
+        }
+        else if (out == "아니오")
+        {
+            cout << "나가실때 정산 부탁드립니다." << endl;
+            cin.ignore();
+            cin.ignore();
+        }
+    }
 }
 
 void Controller::manageData()
