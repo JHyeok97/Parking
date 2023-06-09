@@ -131,7 +131,7 @@ void Controller::calculate()
         cin.ignore();
         cin.ignore();
     }
-    else
+    else if(check == 0)
     {
 
         // 입차시간, 출차시간(현재시간) 출력
@@ -151,7 +151,7 @@ void Controller::calculate()
         // 주차 요금 계산
         int parkingRate = 5000.0; // 시간당 요금 (3000원)
         int parkingFee = parkingDuration * parkingRate;
-        cout << "사용요금 : " << parkingFee << "원 입니다." << endl;
+        cout << "사용요금 : " << 3000 + parkingFee << "원 입니다." << endl;
 
         string out;
         cout << "출차 하시겠습니까?? (예/아니오) " << endl;
@@ -165,7 +165,7 @@ void Controller::calculate()
             {
                 database->out_time(exit_time, car_id);
                 database->Pay(exit_time, car_id, enter_time, payment, parkingFee);
-                cout << "카드결제되었습니다.좋은하루되세요." << endl;
+                cout << "카드결제 되었습니다.좋은 하루 되세요." << endl;
                 cin.ignore();
                 cin.ignore();
             }
@@ -173,7 +173,7 @@ void Controller::calculate()
             {
                 database->out_time(exit_time, car_id);
                 database->Pay(exit_time, car_id, enter_time, payment, parkingFee);
-                cout << "현금결제되었습니다.좋은하루되세요." << endl;
+                cout << "현금결제 되었습니다.좋은 하루 되세요." << endl;
                 cin.ignore();
                 cin.ignore();
             }
