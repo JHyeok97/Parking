@@ -120,7 +120,6 @@ void Controller::calculate()
     string exit_time = oss.str();
 
     string enter_time = database->calculate(car_id);
-
     int check = database->check(car_id);
 
     if (check == 1)
