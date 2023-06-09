@@ -36,6 +36,8 @@ public:
     int check(const std::string &car_id);
     bool out_time(const std::string& exit_time, const std::string& car_id);
     bool Pay(const std::string& exit_time, const std::string& car_id, const std::string& guest_id, const std::string& payment, const int& parking_fee);
+    bool happybotton();
+
 };
 
 #endif // DATABASE_H

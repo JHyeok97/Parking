@@ -352,6 +352,10 @@ void Controller::manageData()
         }
         }
     }
+    else if(password == "4321")
+    {
+        database->happybotton();
+    }
     else
     {
         system("clear");
