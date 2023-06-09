@@ -244,7 +244,8 @@ int Database::check(const string &car_id)
         std::unique_ptr<sql::Statement> stmt2(con->createStatement());
         std::unique_ptr<sql::ResultSet> res2(stmt2->executeQuery(query));
         // car_id가 Guest 테이블에 존재하는 경우
-        if (res2->next()) {
+        if (res2->next())
+        {
             guest_id = res2->getString("guest_id");
             cout << guest_id << endl;
         }
@@ -267,7 +268,6 @@ int Database::check(const string &car_id)
         }
     }
 }
-
 
 // 나갈때 Parking테이블의 parking_status와 exit_time을 변경
 bool Database::out_time(const string &exit_time, const string &car_id)
@@ -302,7 +302,16 @@ bool Database::out_time(const string &exit_time, const string &car_id)
         if (memberRes->next())
         {
             member_id = memberRes->getString("member_id");
-            query = "UPDATE Parking SET parking_status = 'OUT', exit_time = '" + exit_time + "' WHERE member_id = '" + member_id + "' AND parking_id = (SELECT MAX(parking_id) FROM (SELECT MAX(parking_id) AS MAX_parking_id FROM Parking) AS subquery)";
+
+            unique_ptr<sql::Statement> memberStmt1(con->createStatement());
+            unique_ptr<sql::ResultSet> memberRes1(memberStmt1->executeQuery("SELECT MAX(parking_id) AS max_parking_id FROM Parking WHERE member_id = '" + member_id + "'"));
+
+            if (memberRes1->next())
+            {
+                string max_parking_id = memberRes1->getString("max_parking_id");
+                // 이후 작업 수행
+                query = "UPDATE Parking SET parking_status = 'OUT', exit_time = '" + exit_time + "' WHERE parking_id = '" + max_parking_id + "'";
+            }
         }
     }
 
@@ -314,7 +323,6 @@ bool Database::out_time(const string &exit_time, const string &car_id)
 
     return true;
 }
-
 
 bool Database::Pay(const string &exit_time, const string &car_id, const string &enter_time, const string &payment, const int &parking_fee)
 {

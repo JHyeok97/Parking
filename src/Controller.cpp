@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <sstream>
 #include <ctime>
 
 using namespace std;
@@ -149,8 +150,8 @@ void Controller::calculate()
 
         // 주차 요금 계산
         int parkingRate = 5000.0; // 시간당 요금 (3000원)
-        int parkingFee = parkingDuration * parkingRate;
-        cout << "사용요금 : " << 3000 + parkingFee << "원 입니다." << endl;
+        int parkingFee = parkingDuration * parkingRate + 3000;
+        cout << "사용요금 : " << parkingFee << "원 입니다." << endl;
 
         string out;
         cout << "출차 하시겠습니까?? (예/아니오) " << endl;
