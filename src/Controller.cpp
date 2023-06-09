@@ -23,7 +23,7 @@ void Controller::run()
             enterCar();
             break;
         case 2:
-            exitCar();
+            calculate();
             break;
         case 3:
             manageData();
@@ -69,7 +69,7 @@ void Controller::enterCar()
                 tm *ltm = localtime(&now_c);
                 cout << "현재 시간: " << 1900 + ltm->tm_year << "년 " << 1 + ltm->tm_mon << "월 " << ltm->tm_mday << "일 " << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec << endl;
                 // Guest ID 생성
-                std::string guestID = database->generateGuestID();  // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
+                std::string guestID = database->generateGuestID(); // generateGuestID()는 새로운 Guest ID를 생성하는 메소드
                 // Guest 테이블에 차량 ID와 Guest ID 저장
                 database->addGuest(guestID, carID);
                 // Parking 테이블에 값 저장
@@ -96,20 +96,12 @@ void Controller::enterCar()
 
 
 
-
-// 차량 출차 처리 메소드 구현
-void Controller::exitCar()
+std::chrono::system_clock::time_point parseDateTime(const string dateTimeStr)
 {
-    string car_id = view->getInput("Enter car ID: ");                 // 차량 ID 입력 받음
-    string payment_method = view->getInput("Enter payment method: "); // 결제 방법 입력 받음
-    if (database->exitCar(car_id, payment_method))
-    {                           // 차량 출차 처리
-        cout << "Car exited\n"; // 출차 성공 메시지 출력
-    }
-    else
-    {
-        cout << "Error exiting car\n"; // 출차 실패 메시지 출력
-    }
+    std::tm tm = {};
+    std::istringstream ss(dateTimeStr);
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
 void Controller::calculate()

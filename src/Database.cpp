@@ -103,14 +103,6 @@ void Database::enterParking(const std::string& guestID, const std::time_t& enter
 }
 
 
-
-bool Database::exitCar(const std::string &car_id, const std::string &payment_method)
-{
-    unique_ptr<sql::Statement> stmt(con->createStatement());
-    stmt->execute("INSERT INTO Pay (car_id, payment, exit_time) VALUES ('" + car_id + "', '" + payment_method + "', NOW())");
-    return true;
-}
-
 vector<std::vector<std::string>> Database::queryData(const std::string &table_name)
 {
     vector<vector<string>> data;
