@@ -5,6 +5,7 @@
 #include <thread>
 #include <iomanip>
 #include <ctime>
+#include <sstream>
 
 using namespace std;
 
