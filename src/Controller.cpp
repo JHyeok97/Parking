@@ -228,7 +228,6 @@ void Controller::manageData()
         cout << "1. 회원 추가" << endl;
         cout << "2. 회원 목록" << endl;
         cout << "3. 회원 찾기" << endl;
-        cout << "4. 회원 삭제" << endl;
         cout << "\n선택 : ";
         cin >> mem;
 
@@ -335,23 +334,12 @@ void Controller::manageData()
             cin.ignore();
             break;
         }
-        case 4:
-        { // 회원 삭제
-            system("clear");
-            cout << "차량 번호 :";
-            cin.ignore();
-            getline(cin, car_id);
-            if (database->deleteMembers(car_id))
-                cout << "삭제 완료" << endl;
-
-            cout << "Enter 입력 시 처음 화면으로..." << endl;
-            cin.ignore();
-            break;
+        
         default:
             break;
         }
-        }
     }
+    
     else
     {
         system("clear");
