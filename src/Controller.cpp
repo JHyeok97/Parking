@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <ctime>
 #include <sstream>
+#include <termios.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -202,10 +204,19 @@ void Controller::manageData()
 {
     // 데이터 관리 코드
     string password;
-
+    termios oldt, newt;
+    
+    tcgetattr(STDIN_FILENO, &oldt); // get the current terminal I/O structure
+    newt = oldt;
+    newt.c_lflag &= ~ECHO; // manipulate the flag
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // apply the new settings
+    
     system("clear");
     cout << "Password : ";
     cin >> password;
+    
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // reapply the old settings
+
 
     if (password == "1234") // 비밀 번호가 맞으면 실행
     {
@@ -242,15 +253,15 @@ void Controller::manageData()
             cin.ignore(); // 버퍼 초기화
 
             system("clear");
-            cout << "member id : ";
+            cout << "member ids\t: ";
             getline(cin, member_id);
-            cout << "car id : ";
+            cout << "car id\t\t: ";
             getline(cin, car_id);
-            cout << "member name : ";
+            cout << "member name\t: ";
             getline(cin, member_name);
-            cout << "address : ";
+            cout << "address\t\t: ";
             getline(cin, address);
-            cout << "phone number : ";
+            cout << "phone number\t: ";
             getline(cin, phone_number);
 
             if (database->addMembers(member_id, car_id, member_name, address, phone_number, expiration_date_str))
