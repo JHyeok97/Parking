@@ -1,6 +1,8 @@
 # **🚗 Parking Management System: 주차를 더욱 쉽게!**
 
-이 프로젝트는 주차장의 주차 및 결제 정보를 관리하는 **주차 관리 시스템**을 구현하는 것을 목표로 합니다. 주차장에서 발생하는 모든 정보를 한 눈에 볼 수 있게 해주는 이 시스템을 통해, 주차장 관리가 더욱 편리해질 것입니다.
+
+이 프로젝트는 주차장의 주차 및 결제 정보를 관리하는 **주차 관리 시스템**을 구현하는 것을 목표로 합니다. 
+주차장에서 발생하는 모든 정보를 한 눈에 볼 수 있게 해주는 이 시스템을 통해, 주차장 관리가 더욱 편리해질 것입니다.
 
 ## **🏗️ 구조: MVC 패턴**
 ![Dw2qq5Kg](https://github.com/JHyeok97/Parking/assets/64429035/5202d2a9-526f-48ef-b9a5-5da7bdf8c845)
@@ -43,10 +45,12 @@ Controller 클래스는 View와 Database를 연결하고, 사용자의 요청을
 
 이 프로젝트는 주차장의 주차 및 결제 정보를 관리하기 위한 **데이터베이스**를 사용합니다. 이 데이터베이스는 방문객, 회원, 관리자, 주차 정보, 결제 정보 등에 대한 정보를 포함하는 다양한 테이블을 포함합니다.
 ![o4EnzZVs](https://github.com/JHyeok97/Parking/assets/64429035/821d86a1-a93a-4128-85c5-22ce0d62dbde)
+
 이 관계도는 다음과 같이 해석할 수 있습니다:
 Guest 테이블의 guest_id는 Parking과 Pay 테이블에 연결되어 있습니다.
 Members 테이블의 member_id는 Parking 테이블에 연결되어 있습니다.
 Parking 테이블의 parking_id는 Pay 테이블에 연결되어 있습니다.
+
 ![4SOrzCWj](https://github.com/JHyeok97/Parking/assets/64429035/9440d19f-1edf-4d74-882f-95ad0c1b31e8)
 
 - **Guest**: 방문객을 나타내며, 각각 고유의 ID와 차량 ID를 가집니다.
