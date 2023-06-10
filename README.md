@@ -14,27 +14,24 @@
 - **Database (Database.h / Database.cpp)**: 이 파일들은 데이터베이스 기능을 담당합니다. 주차장의 정보와 주차된 차량의 정보를 저장하고 관리합니다.
 - **Controller (Controller.h / Controller.cpp)**: 이 파일들은 프로그램의 전반적인 흐름을 제어합니다. View로부터 사용자의 입력을 받아, 해당 기능을 Database를 통해 실행하고, 결과를 다시 View를 통해 사용자에게 보여줍니다.
 
-**파일 구조**
+### **파일 구조**
 
 **main.cpp**
 이 파일은 프로그램의 시작점입니다. Controller 객체를 생성하고, run() 메소드를 호출하여 프로그램을 시작합니다.
 
 **View.h / View.cpp**
-View 클래스는 사용자 인터페이스를 담당합니다. 사용자로부터 입력을 받아 처리하고, 결과를 출력합니다.
 
 - showMenu(): 사용자에게 메뉴를 보여주고 선택을 받습니다.
 - getCarNumber(): 사용자로부터 차량 번호를 입력받습니다.
 - showParkingStatus(): 주차장의 현재 상태를 보여줍니다.
 
 **Database.h / Database.cpp**
-Database 클래스는 데이터를 관리합니다. 주차장의 상태와 차량 정보를 저장하고, 필요한 정보를 제공합니다.
 
 - addCar(): 차량을 주차장에 추가합니다.
 - removeCar(): 주차장에서 차량을 제거합니다.
 - getParkingStatus(): 주차장의 현재 상태를 반환합니다.
 
 **Controller.h / Controller.cpp**
-Controller 클래스는 View와 Database를 연결하고, 사용자의 요청을 처리합니다.
 
 - run(): 프로그램을 실행합니다. 사용자의 선택에 따라 적절한 작업을 수행합니다.
 - parkCar(): 차량을 주차합니다.
