@@ -224,6 +224,10 @@ string Database::calculate(const string &car_id)
         {
             // car_id가 Guest 테이블 및 Members 테이블에 모두 존재하지 않는 경우
             cout << "해당 차량조회에 실패하였습니다. 다시 입력해 주세요." << endl;
+            cout << "\n메뉴로 돌아가려면 엔터를 누르세요." << endl;
+            cin.ignore();
+            cin.ignore();
+
             return "";
         }
     }
@@ -340,4 +344,38 @@ bool Database::Pay(const string &exit_time, const string &car_id, const string &
         return true;
     }
     return false;
+}
+
+bool Database::happybotton()
+{
+    try
+    {
+        unique_ptr<sql::Statement> stmt(con->createStatement());
+        stmt->execute("SET FOREIGN_KEY_CHECKS = 0;");
+
+        unique_ptr<sql::Statement> stmt2(con->createStatement());
+        stmt2->execute("DELETE FROM Pay;");
+
+        unique_ptr<sql::Statement> stmt3(con->createStatement());
+        stmt3->execute("DELETE FROM Guest;");
+
+        unique_ptr<sql::Statement> stmt4(con->createStatement());
+        stmt4->execute("DELETE FROM Members;");
+
+        unique_ptr<sql::Statement> stmt5(con->createStatement());
+        stmt5->execute("DELETE FROM Parking");
+
+        unique_ptr<sql::Statement> stmt6(con->createStatement());
+        stmt6->execute("SET FOREIGN_KEY_CHECKS = 1;");
+
+        // 추가적인 작업 수행
+
+        return true;
+    }
+    catch (sql::SQLException &e)
+    {
+        // 예외 처리
+        cout << "SQL Exception: " << e.what() << endl;
+        return false;
+    }
 }

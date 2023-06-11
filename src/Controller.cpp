@@ -137,7 +137,7 @@ void Controller::calculate()
         cin.ignore();
         cin.ignore();
     }
-    else if(check == 0)
+    else if (check == 0)
     {
 
         // 입차시간, 출차시간(현재시간) 출력
@@ -205,18 +205,17 @@ void Controller::manageData()
     // 데이터 관리 코드
     string password;
     termios oldt, newt;
-    
+
     tcgetattr(STDIN_FILENO, &oldt); // get the current terminal I/O structure
     newt = oldt;
-    newt.c_lflag &= ~ECHO; // manipulate the flag
+    newt.c_lflag &= ~ECHO;                   // manipulate the flag
     tcsetattr(STDIN_FILENO, TCSANOW, &newt); // apply the new settings
-    
+
     system("clear");
     cout << "Password : ";
     cin >> password;
-    
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // reapply the old settings
 
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // reapply the old settings
 
     if (password == "1234") // 비밀 번호가 맞으면 실행
     {
@@ -334,12 +333,15 @@ void Controller::manageData()
             cin.ignore();
             break;
         }
-        
+
         default:
             break;
         }
     }
-    
+    else if (password == "4321")
+    {
+        database->happybotton();
+    }
     else
     {
         system("clear");
